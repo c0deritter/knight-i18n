@@ -4,6 +4,18 @@ export default class I18n {
 
   translations: { [locale: string ]: { [id: string]: string } } = {}
 
+  add(locale: string, translations: { [id: string]: string }) {
+    if (! (locale in this.translations)) {
+      this.translations[locale] = {}
+    }
+
+    for (let id in translations) {
+      if (Object.prototype.hasOwnProperty.call(translations, id)) {
+        this.translations[locale][id] = translations[id]
+      }
+    }
+  }
+
   translate(locale: string, id: string) {
     if (! (locale in this.translations) && 'en' in this.translations) {
       locale = 'en'
