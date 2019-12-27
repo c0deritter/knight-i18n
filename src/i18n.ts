@@ -16,7 +16,13 @@ export default class I18n {
     }
   }
 
-  translate(locale: string, id: string) {
+  merge(i18n: I18n) {
+    for (let locale in i18n.translations) {
+      this.add(locale, i18n.translations[locale])
+    }
+  }
+
+  translate(locale: string, id: string): string {
     if (! (locale in this.translations) && 'en' in this.translations) {
       locale = 'en'
     }
@@ -27,9 +33,8 @@ export default class I18n {
       if (id in translations) {
         return translations[id]
       }
-      else {
-        return id
-      }
     }
+    
+    return id
   }
 }
