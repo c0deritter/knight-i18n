@@ -31,10 +31,8 @@ describe('i18n', function() {
       expect(i18n.translate('en', 'a')).to.equal('1')
       expect(i18n.translate('en', 'b')).to.equal('3')
     })
-  })
 
-  describe('merge', function() {
-    it('should merge two I18n\'s', function() {
+    it('should add another I18n', function() {
       let i18n1 = new I18n()
 
       i18n1.add('en', {
@@ -49,7 +47,7 @@ describe('i18n', function() {
         'c': '4'
       })
 
-      i18n1.merge(i18n2)
+      i18n1.add(i18n2)
 
       expect(i18n1.translate('en', 'a')).to.equal('1')
       expect(i18n1.translate('en', 'b')).to.equal('3')
