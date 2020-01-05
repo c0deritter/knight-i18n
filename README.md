@@ -45,4 +45,9 @@ additionalI18n.add('en', {
 
 let appI18n = new I18n()
 appI18n.add(userI18n)
+
+// will overwrite any existing keys in that language
+appI18n.add('en', {
+  'welcome': 'Welcome'
+})
 ```
