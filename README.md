@@ -51,3 +51,11 @@ appI18n.add('en', {
   'welcome': 'Welcome'
 })
 ```
+
+### Translation options
+
+```typescript
+interface TranslationOptions {
+  returnUndefinedIfTranslationMissing?: boolean
+}
+```

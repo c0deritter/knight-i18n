@@ -54,4 +54,18 @@ describe('i18n', function() {
       expect(i18n1.translate('en', 'c')).to.equal('4')
     })
   })
+
+  describe('translate', function() {
+    it('should return undefined if the translation was not found and the option was set')
+    let i18n = new I18n()
+
+    expect(i18n.translate('en', 'b', {returnUndefinedIfTranslationMissing: true})).to.be.undefined
+
+    i18n.add('en', {
+      'a': 'A'
+    })
+
+    expect(i18n.translate('en', 'b', {returnUndefinedIfTranslationMissing: true})).to.be.undefined
+
+  })
 })

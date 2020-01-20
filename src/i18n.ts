@@ -27,7 +27,7 @@ export default class I18n {
     }
   }
 
-  translate(locale: string, id: string|undefined|null): string|undefined {
+  translate(locale: string, id: string|undefined|null, options?: TranslationOptions): string|undefined {
     if (id == undefined) {
       return undefined
     }
@@ -44,6 +44,14 @@ export default class I18n {
       }
     }
     
+    if (options && options.returnUndefinedIfTranslationMissing) {
+      return undefined
+    }
+    
     return id
   }
+}
+
+export interface TranslationOptions {
+  returnUndefinedIfTranslationMissing?: boolean
 }
