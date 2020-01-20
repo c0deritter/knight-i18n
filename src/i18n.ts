@@ -27,7 +27,11 @@ export default class I18n {
     }
   }
 
-  translate(locale: string, id: string): string {
+  translate(locale: string, id: string|undefined|null): string|undefined {
+    if (id == undefined) {
+      return undefined
+    }
+
     if (! (locale in this.translations) && 'en' in this.translations) {
       locale = 'en'
     }
