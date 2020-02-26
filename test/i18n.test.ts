@@ -56,16 +56,186 @@ describe('i18n', function() {
   })
 
   describe('translate', function() {
-    it('should return undefined if the translation was not found and the option was set')
-    let i18n = new I18n()
+    it('should return the set translation string given an id', function() {
+      let i18n = new I18n
+      i18n.locale = 'en'
 
-    expect(i18n.translate('en', 'b', {returnUndefinedIfTranslationMissing: true})).to.be.undefined
+      i18n.add('en', {
+        'a': 'a-en'
+      })
+      
+      i18n.add('de', {
+        'a': 'a-de'
+      })
 
-    i18n.add('en', {
-      'a': 'A'
+      expect(i18n.translate('a')).to.equal('a-en')
     })
 
-    expect(i18n.translate('en', 'b', {returnUndefinedIfTranslationMissing: true})).to.be.undefined
+    it('should return the set translation string given a locale and an id', function() {
+      let i18n = new I18n
+      i18n.locale = 'en'
 
+      i18n.add('en', {
+        'a': 'a-en'
+      })
+      
+      i18n.add('de', {
+        'a': 'a-de'
+      })
+
+      expect(i18n.translate('de', 'a')).to.equal('a-de')
+    })
+
+    it('should return the id if it was not found', function() {
+      let i18n = new I18n()    
+      i18n.locale = 'en'
+
+      expect(i18n.translate('b')).to.equal('b')
+      expect(i18n.translate('b', 'parameter')).to.equal('b')
+      expect(i18n.translate('de', 'b')).to.equal('de') // if the locale is not present it will be treated as an id
+      expect(i18n.translate('de', 'b', 'parameter')).to.equal('de') // if the locale is not present it will be treated as an id
+
+      i18n.add('en', {
+        'a': 'a-en'
+      })
+      
+      i18n.add('de', {
+        'a': 'a-de'
+      })
+
+      expect(i18n.translate('b')).to.equal('b')
+      expect(i18n.translate('b', 'parameter')).to.equal('b')
+      expect(i18n.translate('de', 'b')).to.equal('b')
+      expect(i18n.translate('de', 'b', 'parameter')).to.equal('b')
+    })
+
+    it('should return undefined if the translation was not found and the option was set', function() {
+      let i18n = new I18n()    
+      i18n.locale = 'en'
+
+      expect(i18n.translate('b', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('b', 'parameter', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('de', 'b', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('de', 'b', 'parameter', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+
+      i18n.add('en', {
+        'a': 'a-en'
+      })
+      
+      i18n.add('de', {
+        'a': 'a-de'
+      })
+
+      expect(i18n.translate('b', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('b', 'parameter', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('de', 'b', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('de', 'b', 'parameter', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+    })
+
+    it('should return the value of the translation function given an id', function() {
+      let i18n = new I18n
+      i18n.locale = 'en'
+
+      i18n.add('en', {
+        'a': (parameter: any) => 'a-en-' + parameter
+      })
+      
+      i18n.add('de', {
+        'a': (parameter: any) => 'a-de-' + parameter
+      })
+
+      expect(i18n.translate('a')).to.equal('a-en-undefined')
+    })
+
+    it('should return the value of the translation function given a locale and an id', function() {
+      let i18n = new I18n
+      i18n.locale = 'en'
+
+      i18n.add('en', {
+        'a': (parameter: any) => 'a-en-' + parameter
+      })
+      
+      i18n.add('de', {
+        'a': (parameter: any) => 'a-de-' + parameter
+      })
+
+      expect(i18n.translate('de', 'a')).to.equal('a-de-undefined')
+    })
+
+    it('should return the value of the translation function given an id and parameter', function() {
+      let i18n = new I18n
+      i18n.locale = 'en'
+
+      i18n.add('en', {
+        'a': (parameter: any) => 'a-en-' + parameter
+      })
+      
+      i18n.add('de', {
+        'a': (parameter: any) => 'a-de-' + parameter
+      })
+
+      expect(i18n.translate('a', 'parameter')).to.equal('a-en-parameter')
+    })
+
+    it('should return the value of the translation function given a locale and an id', function() {
+      let i18n = new I18n
+      i18n.locale = 'en'
+
+      i18n.add('en', {
+        'a': (parameter: any) => 'a-en-' + parameter
+      })
+      
+      i18n.add('de', {
+        'a': (parameter: any) => 'a-de-' + parameter
+      })
+
+      expect(i18n.translate('de', 'a', 'parameter')).to.equal('a-de-parameter')
+    })
+
+    it('should return the id the corresponding function was not found', function() {
+      let i18n = new I18n()
+      i18n.locale = 'en'  
+
+      expect(i18n.translate('b')).to.equal('b')
+      expect(i18n.translate('b', 'parameter')).to.equal('b')
+      expect(i18n.translate('de', 'b')).to.equal('de') // if the locale is not present it will be treated as an id
+      expect(i18n.translate('de', 'b', 'parameter')).to.equal('de') // if the locale is not present it will be treated as an id
+
+      i18n.add('en', {
+        'a': (parameter: any) => 'a-en-' + parameter
+      })
+      
+      i18n.add('de', {
+        'a': (parameter: any) => 'a-de-' + parameter
+      })
+
+      expect(i18n.translate('b')).to.equal('b')
+      expect(i18n.translate('b', 'parameter')).to.equal('b')
+      expect(i18n.translate('de', 'b')).to.equal('b')
+      expect(i18n.translate('de', 'b', 'parameter')).to.equal('b')
+    })
+
+    it('should return undefined if the corresponding function was not found and the option was set', function() {
+      let i18n = new I18n()
+      i18n.locale = 'en'
+
+      expect(i18n.translate('b', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('b', 'parameter', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('de', 'b', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('de', 'b', 'parameter', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+
+      i18n.add('en', {
+        'a': (parameter: any) => 'a-en-' + parameter
+      })
+      
+      i18n.add('de', {
+        'a': (parameter: any) => 'a-de-' + parameter
+      })
+
+      expect(i18n.translate('b', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('b', 'parameter', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('de', 'b', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+      expect(i18n.translate('de', 'b', 'parameter', { returnUndefinedIfTranslationMissing: true })).to.be.undefined
+    })
   })
 })
