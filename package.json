@@ -1,19 +1,17 @@
 {
-  "name": "mega-nice-i18n",
-  "version": "2.3.0",
-  "description": "A mega nice i18n lib",
+  "name": "knight-i18n",
+  "version": "1.0.0",
+  "description": "A library for internationalization",
   "main": "lib/i18n.js",
   "types": "lib/i18n.d.ts",
   "files": [
     "lib/**/*"
   ],
-  "dependencies": {
-    "@types/chai": "^4.2.7",
-    "@types/mocha": "^5.2.7",
-    "chai": "^4.2.0",
-    "mocha": "^6.2.2"
-  },
   "devDependencies": {
+    "@types/chai": "^4.2.16",
+    "@types/mocha": "^8.2.2",
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2",
     "ts-node": "^8.4.1",
     "typescript": "^3.7.2"
   },

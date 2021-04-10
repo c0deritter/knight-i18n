@@ -2,60 +2,57 @@ export default class I18n {
 
   // https://stackoverflow.com/questions/28483144/i18n-access-locale-resolution-logic-in-javascript
 
-  translations: { [locale: string ]: { [id: string]: string|((parameter: any) => string) } } = {}
+  translations: { [locale: string]: { [id: string]: string|((parameter: any) => string) } } = {}
   locale?: string
 
-  add(localeOrI18n: string|I18n, translations?: { [id: string]: string|((parameter: any) => string) }) {
-    if (localeOrI18n instanceof I18n) {
-      let i18n = localeOrI18n
+  add(locale: string, translations: { [id: string]: string|((parameter: any) => string) }): void
+  add(i18n: I18n): void
+
+  add(arg1: any, arg2?: any): void {
+    if (arg1 instanceof I18n) {
+      let i18n = arg1
 
       for (let locale in i18n.translations) {
         this.add(locale, i18n.translations[locale])
       }
     }
-    else if (typeof localeOrI18n === 'string') {
-      let locale = localeOrI18n
+    else if (typeof arg1 === 'string') {
+      let locale = arg1
+      let translations = arg2
       
       if (! (locale in this.translations)) {
         this.translations[locale] = {}
       }
   
       for (let id in translations) {
-        if (Object.prototype.hasOwnProperty.call(translations, id)) {
+        if (Object.prototype.hasOwnProperty.call(arg2, id)) {
           this.translations[locale][id] = translations[id]
         }
       }  
     }
   }
 
-  translate(id: string|undefined|null, options?: TranslationOptions): string|undefined
-  translate(locale: string,            id: string|undefined|null, options?: TranslationOptions): string|undefined  
-  translate(id: string|undefined|null, parameter?: any,           options?: TranslationOptions): string|undefined
-  translate(locale: string,            id: string|undefined|null, parameter?: any, options?: TranslationOptions): string|undefined
+  translate(id: string): string|undefined
+  translate(id: string, parameter?: any): string|undefined
+  translate(locale: string, id: string): string|undefined  
+  translate(locale: string, id: string, parameter?: any): string|undefined
 
-  translate(localeOrId: string, idOrParameterOrOptions?: string|TranslationOptions|any, parameterOrOptions?: any|TranslationOptions, options?: TranslationOptions): string|undefined {
+  translate(arg1: any, arg2?: any, arg3?: any, arg4?: any): string|undefined {
     let locale = this.locale
     let id
     let parameter = undefined
 
     // the easiest case first
-    if (options != undefined) {
-      locale = localeOrId
-      id = idOrParameterOrOptions
-      parameter = parameterOrOptions
+    if (arg4 != undefined) {
+      locale = arg1
+      id = arg2
+      parameter = arg3
     }
     // otherwise we have to fiddle
     else {
       // lets start from the back (3rd parameter)
-      if (parameterOrOptions != undefined) {
-        // if it contains any of the properties that are expected in an options object it is our options object
-        if (typeof parameterOrOptions == 'object' && 'returnUndefinedIfTranslationMissing' in parameterOrOptions) {
-          options = parameterOrOptions
-        }
-        // otherwise it is parameters
-        else {
-          parameter = parameterOrOptions
-        }
+      if (arg3 != undefined) {
+        parameter = arg3
       }
 
       // for the first and second parameter we have the problem that we cannot differentiate either of it
@@ -66,21 +63,13 @@ export default class I18n {
       // it is more likely that an id is used that was not added
       // and the second parameter is also about the id
       // thus the first parameter is our best bet
-      if (localeOrId in this.translations) {
-        locale = localeOrId
-        id = idOrParameterOrOptions
+      if (arg1 in this.translations) {
+        locale = arg1
+        id = arg2
       }
       else {
-        id = localeOrId
-
-        if (idOrParameterOrOptions != undefined) {
-          if (typeof idOrParameterOrOptions == 'object' && 'returnUndefinedIfTranslationMissing' in idOrParameterOrOptions) {
-            options = idOrParameterOrOptions
-          }
-          else {
-            parameter = idOrParameterOrOptions
-          }
-        }
+        id = arg1
+        parameter = arg2
       }
     }
 
@@ -106,15 +95,7 @@ export default class I18n {
         }
       }
     }
-    
-    if (options && options.returnUndefinedIfTranslationMissing) {
-      return undefined
-    }
-    
+
     return id
   }
-}
-
-export interface TranslationOptions {
-  returnUndefinedIfTranslationMissing?: boolean
 }
