@@ -61,7 +61,8 @@ i18n.add('en', {
   'LoginForm.maxTriesExceeded': (maxTries: number) => `You exceeded ${maxTries} tries`
 })
 
-i18n.translate('LoginForm.maxTriesExceeded', 5)
+let translated = i18n.translate('LoginForm.maxTriesExceeded', 5)
+translated == 'You exceeded 5 tries'
 ```
 
 You can use any parameter type you like. For example use an object if you have more than one placeholder.
